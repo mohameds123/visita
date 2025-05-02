@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:visita/core/api_links.dart';
 import 'package:visita/logic/sign_up/state.dart';
 
 class SignUpCubit extends Cubit <SignUpStates>{
@@ -19,7 +20,7 @@ Dio request = Dio();
     emit(SignUpLoadingState());
     try{
      await request.post(
-          "https://vcare.integration25.com/api/auth/register",
+          ApiLinks.signUrl,
         data: {
             "name" : name,
           "email" : email,
