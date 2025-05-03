@@ -11,6 +11,7 @@ class LoginScreen extends StatelessWidget {
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
 
 
   @override
@@ -61,39 +62,58 @@ class LoginScreen extends StatelessWidget {
                   SizedBox(
                     height: 13,
                   ),
-                  TextFormField(
-                    controller: emailController,
-                    style: TextStyle(color: Color.fromRGBO(194, 194, 194, 1)),
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(13),
-                          borderSide: BorderSide(width: 1)),
-                      hintText: "Email",
-                      hintStyle: TextStyle(
-                        color: Color.fromRGBO(194, 194, 194, 1),
-                        fontSize: 20,
-                        fontWeight: FontWeight.w300,
-                      ),
+                  Form(
+                    key: formKey,
+
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          controller: emailController,
+                          validator: (value){
+                            if(value == null || value.isEmpty){
+                              return "please fill this field";
+                            }
+                          },
+                          style: TextStyle(color: Color.fromRGBO(194, 194, 194, 1)),
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(13),
+                                borderSide: BorderSide(width: 1)),
+                            hintText: "Email",
+                            hintStyle: TextStyle(
+                              color: Color.fromRGBO(194, 194, 194, 1),
+                              fontSize: 20,
+                              fontWeight: FontWeight.w300,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 13,
+                        ),
+                        TextFormField(
+                          controller: passController,
+                          validator: (value){
+                            if(value == null || value.isEmpty){
+                              return "please fill this field";
+                            }
+                          },
+                          style: TextStyle(color: Color.fromRGBO(194, 194, 194, 1)),
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(13),
+                                borderSide: BorderSide(width: 1)),
+                            hintText: "Password",
+                            hintStyle: TextStyle(
+                              color: Color.fromRGBO(194, 194, 194, 1),
+                              fontSize: 20,
+                              fontWeight: FontWeight.w300,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  SizedBox(
-                    height: 13,
-                  ),
-                  TextFormField(
-                    controller: passController,
-                    style: TextStyle(color: Color.fromRGBO(194, 194, 194, 1)),
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(13),
-                          borderSide: BorderSide(width: 1)),
-                      hintText: "Password",
-                      hintStyle: TextStyle(
-                        color: Color.fromRGBO(194, 194, 194, 1),
-                        fontSize: 20,
-                        fontWeight: FontWeight.w300,
-                      ),
-                    ),
-                  ),
+
                   SizedBox(
                     height: 13,
                   ),
@@ -101,6 +121,10 @@ class LoginScreen extends StatelessWidget {
 
                   InkWell(
                     onTap: () {
+                      if(formKey.currentState!.validate()){
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text("Fields is required")));
+                      }
                       context.read<LoginCubit>().login(email: emailController.text, pass: passController.text);
                     },
                     child: Container(
